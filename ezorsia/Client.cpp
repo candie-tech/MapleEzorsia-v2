@@ -63,7 +63,7 @@ void Client::UpdateGameStartup() {
 
 	Memory::WriteByte(0x00826F92, 0x00); // instant maker crafting
 
-	Memory::WriteByte(0x009516C2 + 1, 0x89); //bow & arrow no-whack mod
+	Memory::WriteByte(0x009516C2 + 1, 0x89); //star & arrow no-whack mod
 }
 
 void Client::UpdateResolution() {

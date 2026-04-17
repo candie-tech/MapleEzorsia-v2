@@ -52,9 +52,7 @@ void Client::UpdateGameStartup() {
 
 	//optional non-resolution related stuff
 	if (useTubi) { Memory::FillBytes(0x00485C32, 0x90, 2); }
-	Memory::WriteDouble(0x00AFE8A0, setDamageCap);	//ty rain
-	Memory::WriteByte(0x009516C2 + 1, 0x89); //bow & arrow no-whack mod
-	
+	Memory::WriteDouble(0x00AFE8A0, setDamageCap);	//ty rain	
 	int setDamageCapInt = static_cast<int>(setDamageCap < 0 ? setDamageCap - 0.5 : setDamageCap + 0.5);
 	Memory::WriteInt(0x008C3304 + 1, setDamageCapInt); //ty rain
 
@@ -64,28 +62,7 @@ void Client::UpdateGameStartup() {
 
 	Memory::WriteByte(0x0040013E, 0x2F);  //4g edit, not sure if it still works after execution
 
-	//other potential resolution edits/etc
-
-	//0043D260 //0043D3E2 //0043D5C8	//CAnimationDisplayer::Effect_RewardRullet
-	//0048B96A	//CChatBalloon::MakeScreenBalloon
-	//0049D105 //0049D218 //CConfig::
-	//004D584D //CCtrlMLEdit::CreateIMECandWnd
-	//0053EFC3 //x and y //SP_4371_UI_UIWINDOWIMG_ARIANTMATCH_RESULT
-	//0055BEE6 //0055BEEC //0055C07F //0055C086 //0055C1C5 //0055C1CD //CField_LimitedView::DrawViewRange !!!!!
-	//005EB45A //005EB464 //CItemSpeakerDlg::CItemSpeakerDlg
-	//00663079 //CMob::Init
-	//007C252C //007C2531 //CTradingRoomDlg::OnCreate
-	//007E15BE //CSlideNotice::CSlideNotice
-	//007E19CA //CSlideNotice::SetMsg
-	//007E9ABC //007E9ACD //sub_7E99BC
-	//007EB409 //007EB41A //sub_7EB303
-	//007F2007 //007F201B //sub_7F1F25
-	//0085F341 //0085F361 //sub_85F303
-	//008C7FEA //NOP at +2,+3,+4,+5 //sub_8C7FB6  related to CUIStat::Draw(tagRECT const *) //dunno what they were trying to do here, noping jumps
-	//008D2C03 //008D2EED //008D2FB3 //008D305B //008D3124 //008D31EC //008D3273 //008D32FA //008D3381 //008D3408 //008D348F //008D358B //008D369B //CUIStatusBar::OnCreate
-	//008D405E //008D40D4 //sub_8D3B2F
-	//008D4B93 //008D4BBC //CUIStatusBar::SetChatType
-	//00960581 //00960839 //00960C67 //00960DED //CUserLocal::DrawCombo
+	Memory::WriteByte(0x009516C2 + 1, 0x89); //bow & arrow no-whack mod
 }
 
 void Client::UpdateResolution() {

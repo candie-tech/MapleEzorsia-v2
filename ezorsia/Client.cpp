@@ -48,8 +48,7 @@ void Client::UpdateGameStartup() {
 
 	//optional non-resolution related stuff
 	if (useTubi) { Memory::FillBytes(0x00485C32, 0x90, 2); }
-	Memory::WriteByte(0x00826F92, 0x00); // instant maker crafting
-	
+	Memory::WriteDouble(0x00AFE8A0, setDamageCap);	//ty rain
 	int setDamageCapInt = static_cast<int>(setDamageCap < 0 ? setDamageCap - 0.5 : setDamageCap + 0.5);
 	Memory::WriteInt(0x008C3304 + 1, setDamageCapInt); //ty rain
 
@@ -58,6 +57,8 @@ void Client::UpdateGameStartup() {
 	Memory::WriteInt(0x0094D91E + 1, speedMovementCap); //set speed cap //ty ronan
 
 	Memory::WriteByte(0x0040013E, 0x2F);  //4g edit, not sure if it still works after execution
+
+	Memory::WriteByte(0x00826F92, 0x00); // instant maker crafting
 }
 
 void Client::UpdateResolution() {

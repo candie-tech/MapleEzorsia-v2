@@ -56,7 +56,7 @@ void Client::UpdateGameStartup() {
 	Memory::FillBytes(0x0095923F, 0x90, 10); // no breath full disable (mob hit)
 	Memory::FillBytes(0x00953707, 0x90, 3); // allow unlimited attack
 	Memory::WriteByte(0x00490607, 0xEB); // allow repeated chats
-	Memory::WriteByte(0x00826F92, 0x01); // instant maker crafting
+	Memory::WriteByte(0x00826F92, 0x00); // instant maker crafting
 	
 	int setDamageCapInt = static_cast<int>(setDamageCap < 0 ? setDamageCap - 0.5 : setDamageCap + 0.5);
 	Memory::WriteInt(0x008C3304 + 1, setDamageCapInt); //ty rain

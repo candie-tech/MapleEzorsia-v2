@@ -25,16 +25,12 @@ void Client::UpdateGameStartup() {
 	Memory::WriteByte(0x00496633 + 1, 0x47); //kill CSecurityClient::OnPacket//ty chronicle for idea for this
 
 	Memory::FillBytes(0x009F1C04, 0x90, 5);//run from packed client //WinMain: nop ShowStartUpWndModal	//get rid of pop-up at start of game
-	//^might not work for packed client since the window seems to be run before the edit can take place, keeping in case
 	Memory::WriteByte(0x009F242F, 0xEB); //run from packed client //WinMain: jz->jmp for ShowADBalloon code (pretty much at the end of method, above push with small number)
 
 	Memory::WriteByte(0x009F6EDC, 0xEB); //kill if statement in broken //void __thiscall CWvsApp::CreateMainWindow(CWvsApp *this)
 
 	Memory::WriteByte(0x009F74EA + 3, resmanLoadAMNT); //replace their wz load list size with ours //void __thiscall CWvsApp::InitializeResMan(CWvsApp *this)
 	Memory::CodeCave(LoadUItwice, dwLoadUItwice, dwLoadUItwiceNOPs);//working after a check after CWvsApp::InitializeInput
-
-	//Memory::WriteByte(0x008DB387 + 3, 0xFF); //set charbar limit
-	//Memory::CodeCave(ccCUIStatusBarChatLogAddBypass, dwCUIStatusBarChatLogAddBypass, dwCUIStatusBarChatLogAddBypassNops); //set charbar limit
 
 	Memory::FillBytes(0x00C08459, 0x20, 0x00C0846E - 0x00C08459);//remove elevation requests
 	Memory::WriteByte(0x00C08459, 0x22);//remove elevation requests	//thanks stelmo for showing me how to do this
@@ -66,29 +62,6 @@ void Client::UpdateGameStartup() {
 	Memory::WriteInt(0x0094D91E + 1, speedMovementCap); //set speed cap //ty ronan
 
 	Memory::WriteByte(0x0040013E, 0x2F);  //4g edit, not sure if it still works after execution
-
-	//other potential resolution edits/etc
-
-	//0043D260 //0043D3E2 //0043D5C8	//CAnimationDisplayer::Effect_RewardRullet
-	//0048B96A	//CChatBalloon::MakeScreenBalloon
-	//0049D105 //0049D218 //CConfig::
-	//004D584D //CCtrlMLEdit::CreateIMECandWnd
-	//0053EFC3 //x and y //SP_4371_UI_UIWINDOWIMG_ARIANTMATCH_RESULT
-	//0055BEE6 //0055BEEC //0055C07F //0055C086 //0055C1C5 //0055C1CD //CField_LimitedView::DrawViewRange !!!!!
-	//005EB45A //005EB464 //CItemSpeakerDlg::CItemSpeakerDlg
-	//00663079 //CMob::Init
-	//007C252C //007C2531 //CTradingRoomDlg::OnCreate
-	//007E15BE //CSlideNotice::CSlideNotice
-	//007E19CA //CSlideNotice::SetMsg
-	//007E9ABC //007E9ACD //sub_7E99BC
-	//007EB409 //007EB41A //sub_7EB303
-	//007F2007 //007F201B //sub_7F1F25
-	//0085F341 //0085F361 //sub_85F303
-	//008C7FEA //NOP at +2,+3,+4,+5 //sub_8C7FB6  related to CUIStat::Draw(tagRECT const *) //dunno what they were trying to do here, noping jumps
-	//008D2C03 //008D2EED //008D2FB3 //008D305B //008D3124 //008D31EC //008D3273 //008D32FA //008D3381 //008D3408 //008D348F //008D358B //008D369B //CUIStatusBar::OnCreate
-	//008D405E //008D40D4 //sub_8D3B2F
-	//008D4B93 //008D4BBC //CUIStatusBar::SetChatType
-	//00960581 //00960839 //00960C67 //00960DED //CUserLocal::DrawCombo
 }
 
 void Client::UpdateResolution() {
@@ -126,7 +99,6 @@ void Client::UpdateResolution() {
 	Memory::WriteInt(dwQuickSlotCWndVPos + 2, (600 - m_nGameHeight) / 2 - 427); //lea edi,[eax-427]
 	Memory::WriteInt(dwQuickSlotCWndHPos + 2, -798); //lea ebx,[eax-647]
 
-	//Memory::WriteInt(dwByteAvatarMegaHPos + 1, m_nGameWidth + 100); //push 800 ; CAvatarMegaphone::ByeAvatarMegaphone ; IWzVector2D::RelMove ##BAK
 	Memory::WriteInt(dwByteAvatarMegaHPos + 1, m_nGameWidth); //push 800 ; CAvatarMegaphone::ByeAvatarMegaphone ; IWzVector2D::RelMove
 	Memory::WriteInt(dwAvatarMegaWidth + 1, m_nGameWidth); //push 800 ; CAvatarMegaphone ; CreateWnd
 
@@ -148,12 +120,7 @@ void Client::UpdateResolution() {
 	Memory::WriteInt(0x009966D2 + 1, m_nGameWidth - 100);	//mov edx,700 ; CreateDlg
 	Memory::WriteInt(0x009A3E7F + 1, m_nGameHeight);//mov edx,600
 	Memory::WriteInt(0x009A3E72 + 1, m_nGameWidth);	//mov edx,800 ; CreateDlg
-	//Memory::WriteInt(0x0045B898 + 1, m_nGameHeight - 25);	//push 575
 	Memory::WriteInt(0x0045B898 + 1, m_nGameWidth - 225);	//push 575 ##ED  //smega x axis fade
-	//Memory::WriteInt(0x0045B97E + 1, m_nGameWidth);	//push 800 ; RelMove? ##REDUN
-	//Memory::WriteInt(0x004D9BD1 + 1, m_nGameWidth);	//push 800	; StringPool#1443 (BtMouseCilck)		//click ???related?? for tabs and numbers in cash shop
-	//Memory::WriteInt(0x004D9C37 + 1, m_nGameWidth);	//push 800	; StringPool#1443 (BtMouseCilck)		//click ???related?? for tabs and numbers in cash shop
-	//Memory::WriteInt(0x004D9C84 + 1, m_nGameWidth);	//push 800 ; StringPool#1443 (BtMouseCilck)		//click ???related?? for tabs and numbers in cash shop
 	Memory::WriteInt(0x005386F0 + 1, m_nGameHeight);//push 600
 	Memory::WriteInt(0x005386F5 + 1, m_nGameWidth);	//push 800 ; CField::DrawFearEffect
 	Memory::WriteInt(0x0055B808 + 1, m_nGameHeight);//push 600
@@ -244,7 +211,6 @@ void Client::UpdateResolution() {
 	Memory::WriteInt(0x005F6627 + 1, (int)floor(-m_nGameHeight / 2));	//push -300 ;
 
 	Memory::WriteInt(0x0060411C + 1, m_nGameHeight);//push 600
-	//Memory::WriteInt(0x00604126 + 1, floor(-m_nGameWidth / 2));	//push -300 //moves characters side to side on char select //unnecessary atm
 	Memory::WriteInt(0x0060F79B + 1, (m_nGameHeight / 2) - 201);//??possibly related to login utildlg
 	Memory::WriteInt(0x0060F7A4 + 1, (m_nGameHeight / 2) - 181);//??possibly related to login utildlg
 	Memory::WriteInt(0x0060F7AC + 1, (m_nGameWidth / 2) - 201);//??possibly related to login utildlg
@@ -344,7 +310,6 @@ void Client::UpdateResolution() {
 
 	Memory::WriteInt(0x00BE273C, 128);//??
 	Memory::WriteByte(0x00A5FC2B, 0x05);//??
-	//Memory::WriteByte(0x008D1790 + 2, 0x01); //related to quickslots area presence		 originally 1U but changed because unsigned int crashes it after char select
 	Memory::WriteByte(0x0089B636 + 2, 0x01); //related to exp gain/item pick up msg, seems to affect msg height ! originally 1U but changed because unsigned int crashes it after char select
 	Memory::WriteByte(0x00592A06 + 1, 0x01);//???likely related to mouse pos
 
@@ -387,60 +352,8 @@ void Client::UpdateResolution() {
 
 	Memory::WriteInt(0x0089B796 + 1, m_nGameHeight - 18);//???related to exp gain/item pick up msg //??!!found in another diff also !!!!!!!!!!!!
 
-	//Memory::WriteInt(0x0089BA03 + 1, m_nGameHeight - 96); //??related to exp gain/item pick up msg
-	//Memory::WriteInt(0x008D3F73 + 1, m_nGameHeight - 93);//bottom frame, white area
-	//Memory::WriteInt(0x008D3FE5 + 1, m_nGameHeight - 93);//bottom frame, grey area
-	//Memory::WriteInt(0x008D8353 + 1, m_nGameHeight - 46); //bottom frame, character level
-	//Memory::WriteInt(0x008D83D1 + 1, m_nGameHeight - 55); //role
-	//Memory::WriteInt(0x008D8470 + 1, m_nGameHeight - 40); //name of character
-
-	//Memory::WriteInt(0x008DE850 + 1, 580);//quickslotcheckX//interactivity of bottom buttoms	//test, could be wrong
-	//Memory::WriteInt(0x008DE896 + 1, 647);//quickslotcheckX//interactivity of bottom buttoms	//test, could be wrong
-	//Memory::WriteInt(0x008DE82B + 1, 507);///quickslotcheckY //interactivity of bottom buttoms //test, could be wrong
-	//008DE8A9 //CUIStatusBar::HitTest //related to prev^
-
-	//Memory::WriteInt(0x008DA11C + 1, m_nGameHeight - 19);//??likely various status bar UI components
-	//008DA115 //sub_8D850B //related to prev^ 
-	//Memory::WriteInt(0x008DA3D4 + 1, m_nGameHeight - 56); //exphpmp % labels
-	//Memory::WriteInt(0x008DA463 + 1, m_nGameHeight - 51); //stat bar gradient or bracket
-	//Memory::WriteInt(0x008DA4F2 + 1, m_nGameHeight - 51);//stat bar gradient or bracket
-	//Memory::WriteInt(0x008DA61B + 1, m_nGameHeight - 56);//??likely various status bar UI components
-
-	//Memory::WriteInt(0x008DA90F + 1, m_nGameHeight - 51);//brackets for stat numbers
-	//Memory::WriteInt(0x008DA9C6 + 1, m_nGameHeight - 51);
-	//Memory::WriteInt(0x008DAC3F + 1, m_nGameHeight - 51);
-	//Memory::WriteInt(0x008DACF1 + 1, m_nGameHeight - 51);
-	//Memory::WriteInt(0x008DAF64 + 1, m_nGameHeight - 51);
-
-	//Memory::WriteInt(0x008DFA6F + 1, m_nGameHeight - 81);//chat box selection, dragging box size, minus plus sign, typing interac
-	//Memory::WriteInt(0x008DFB01 + 1, m_nGameHeight - 81);
-	//Memory::WriteInt(0x008DFBA5 + 1, m_nGameHeight - 80);
-	//Memory::WriteInt(0x008DFC10 + 1, m_nGameHeight - 85);
-
-	//Memory::WriteInt(0x008D4AFB + 1, m_nGameHeight - 91); //is for the little grab/resize bar on it (I think)??
-	//Memory::WriteInt(0x008D4C1F + 1, m_nGameHeight - 90);//??likely various status bar UI components
-	//Memory::WriteInt(0x008D4CDD + 1, m_nGameHeight - 20);//??likely various status bar UI components
-	//Memory::WriteInt(0x008D4BBC + 6, m_nGameHeight - 114);//??likely various status bar UI components
-	//Memory::WriteInt(0x008D4C47 + 1, m_nGameHeight - 87);//minimized chat box frame
-	//Memory::WriteInt(0x008D628B + 1, m_nGameHeight - 91); //is for the background for the text area.??
-	//Memory::WriteInt(0x008D6300 + 1, m_nGameHeight - 90); //is for the scroll bar on the chat text area.??
-	//Memory::WriteInt(0x008D4B6D + 1, m_nGameHeight - 90);//scroll bar of chat
-	//Memory::WriteInt(0x008D276A + 1, m_nGameHeight - 19);//??likely various status bar UI components
-
-	//Memory::WriteInt(0x008D7778 + 3, m_nGameHeight - 42);//???likely various status bar UI components
-	//Memory::WriteInt(0x008D7785 + 3, m_nGameHeight - 26);//??likely various status bar UI components
-	//Memory::WriteInt(0x008D783A + 3, m_nGameHeight - 41);//??likely various status bar UI components
-	//Memory::WriteInt(0x008D7847 + 3, m_nGameHeight - 26);//??likely various status bar UI components
-
-	//Memory::WriteInt(0x008D2FAE + 1, m_nGameHeight - 57); //bottom 4 large buttons
-	//Memory::WriteInt(0x008D3056 + 1, m_nGameHeight - 57);
-	//Memory::WriteInt(0x008D311F + 1, m_nGameHeight - 57);
-	//Memory::WriteInt(0x008D31E7 + 1, m_nGameHeight - 57);//bottom 4 large buttons
-
 	Memory::WriteInt(0x00849E39 + 1, m_nGameHeight - 177); //system menu pop up
-	//00849E3F related to previous^
 	Memory::WriteInt(0x0084A5B7 + 1, m_nGameHeight - 281); //shortcuts pop up	//0x84A5BD -  System Options "X" Position. if needed
-	//0084A5BD related to previous^
 
 	Memory::WriteInt(0x00522C73 + 1, m_nGameHeight - 92);// ??various requests like party, guild, friend, family, invites that pop up
 	Memory::WriteInt(0x00522E65 + 1, m_nGameHeight - 92); // ??various requests like party, guild, friend, family, invites that pop up
@@ -454,16 +367,14 @@ void Client::UpdateResolution() {
 	Memory::WriteInt(0x00523FA3 + 1, m_nGameHeight - 92);// various requests like party, guild, friend, family, invites that pop up
 	Memory::WriteInt(0x005243DB + 1, m_nGameHeight - 92);// various requests like party, guild, friend, family, invites that pop up
 	Memory::WriteInt(0x00523154 + 1, m_nGameHeight - 102);//?? various requests like party, guild, friend, family, invites that pop up
-	//0052315C part of the previous^
 
 	int reqPopOffset = 41;
 	Memory::WriteInt(0x0052418C + 1, m_nGameHeight - 102);//party quest available pop-up y axis		my first address find own my own
-	//005241A0 //SP_1299_UI_UIWINDOWIMG_FADEYESNO_BACKGRND5 //no idea what this is for, but if you notice broken things in pop up requests, this could be your addy
 	Memory::WriteInt(0x00523092 + 1, 464 - reqPopOffset);//various requests like party, guild, friend, family, invites that pop up	//trade		 //thank you Rain for the width addresses
 	Memory::WriteInt(0x0052336D + 1, 464 - reqPopOffset);//various requests like party, guild, friend, family, invites that pop up //Party Invite
 	Memory::WriteInt(0x00522E79 + 1, 464 - reqPopOffset);//various requests like party, guild, friend, family, invites that pop up //friend request
 	Memory::WriteInt(0x00522C87 + 1, 464 - reqPopOffset);//various requests like party, guild, friend, family, invites that pop up	// Guild Invite
-	//Memory::WriteInt(0x005235A9 + 1, 464 - reqPopOffset);//various requests like party, guild, friend, family, invites that pop up	// Quest Complete, currently unneeded as working without it
+	
 	Memory::WriteInt(0x0052379F + 1, 464 - reqPopOffset);//various requests like party, guild, friend, family, invites that pop up//??
 	Memory::WriteInt(0x00523991 + 1, 464 - reqPopOffset);//various requests like party, guild, friend, family, invites that pop up/??
 	Memory::WriteInt(0x00523BC5 + 1, 464 - reqPopOffset);//various requests like party, guild, friend, family, invites that pop up/??
@@ -471,37 +382,10 @@ void Client::UpdateResolution() {
 	Memory::WriteInt(0x00523FB7 + 1, 464 - reqPopOffset);//various requests like party, guild, friend, family, invites that pop up// ??
 	Memory::WriteInt(0x005243EF + 1, 464 - reqPopOffset);//various requests like party, guild, friend, family, invites that pop up//??
 
-	//Memory::WriteInt(0x008D326E + 1, m_nGameHeight - 85); //smol buttoms right of chat box (all - 85 ones)
-	//Memory::WriteInt(0x008D32F5 + 1, m_nGameHeight - 85);
-	//Memory::WriteInt(0x008D337C + 1, m_nGameHeight - 85);
-	//Memory::WriteInt(0x008D3403 + 1, m_nGameHeight - 85);
-	//Memory::WriteInt(0x008D348A + 1, m_nGameHeight - 85);
-	//Memory::WriteInt(0x008D3586 + 1, m_nGameHeight - 85);
-	//Memory::WriteInt(0x008D3696 + 1, m_nGameHeight - 85);
-	//Memory::WriteInt(0x008D4058 + 1, m_nGameHeight - 85);
-	//Memory::WriteInt(0x008DF903 + 1, m_nGameHeight - 85);	
-	//008DF908 addr of related^ //CUIStatusBar::ToggleQuickSlot 
-	//Memory::WriteInt(0x008DFFCF + 1, m_nGameHeight - 85);	//CUIStatusBar::SetButtonBlink
-	//008DFFD4 //related to^
-	//Memory::WriteInt(0x008D40CE + 1, m_nGameHeight - 81);//smol buttoms right of chat box (all - 85 ones)
-
-	//Memory::CodeCave(PositionBossBarY2, 0x007E169B, 6);//boss bar, check for server msg, looking in wrong address...
-	//if (serverMessageExists != 0) 
-	//{
-	//	Memory::CodeCave(PositionBossBarY, dwBossBar, 7);//boss bar normal position without server msg
-	//}
-	//else {
-	//	Memory::CodeCave(PositionBossBarY1, dwBossBar, 7);//boss bar with server msg
-	//}
-
 	Memory::WriteByte(0x00533B03, 0xb8);	//boss bar extend to window
 	Memory::WriteInt(0x00533B03 + 1, m_nGameWidth - 15);	//boss bar	extend to window
 	Memory::WriteByte(0x00534370, 0xb9);	//boss bar	extend to window
 	Memory::WriteInt(0x00534370 + 1, m_nGameWidth - 22);	//boss bar	extend to window
-
-	//myHeight = -(Client::m_nGameHeight - 600) / 2;//cash shop fix for frame area	//recalc offsets
-	//myWidth = -(Client::m_nGameWidth - 800) / 2;//cash shop fix for frame area		//recalc offsets
-	//Memory::CodeCave(CashShopFix, dwCashFix, 6);//cash shop fix for frame area //moves frame to top left (not used rn)
 
 	myHeight = (Client::m_nGameHeight - 600) / 2;//cash shop fix for frame area	//recalc offsets
 	myWidth = (Client::m_nGameWidth - 800) / 2;//cash shop fix for frame area		//recalc offsets
@@ -539,9 +423,6 @@ void Client::UpdateResolution() {
 		Memory::WriteInt(0x005F481E + 1, (int)floor(-m_nGameHeight / 2));//push -300				!!game login frame!! turn this on if you edit UI.wz and use a frame that matches your res
 		Memory::WriteInt(0x005F4824 + 1, (int)floor(-m_nGameWidth / 2));	//push -400 ; RelMove?				!!game login frame!! turn this on if you edit UI.wz and use a frame that matches your res
 	}
-	//nHeightOfsettedloginFrameFix = 0 + myHeight; nWidthOfsettedloginFrameFix = 0 + myWidth;
-	//nTopOfsettedloginFrameFix = 0 + myHeight; nLeftOfsettedloginFrameFix = 0 + myWidth; //parameters for fix cash preview
-	//Memory::CodeCave(loginFrameFix, dwloginFrameFix, loginFrameFixNOPs); //failed login frame fix =(
 
 	if (MainMain::bigLoginFrame) {
 		Memory::WriteInt(0x005F464D + 1, m_nGameWidth - 165);	//mov eax,800 ; RelMove?	//game version number for login frames that hug the side of the screen //you will still need to offset ntop, and that may require a code cave if your height resolution is too big
@@ -555,9 +436,6 @@ void Client::UpdateResolution() {
 		nHeightOfsettedLoginBackCanvasFix = 352 + myHeight; nWidthOfsettedLoginBackCanvasFix = 125 + myWidth;//para for world select buttonsViewRec
 		nTopOfsettedLoginBackCanvasFix = 125 + myHeight; nLeftOfsettedLoginBackCanvasFix = 0 + myWidth;
 		Memory::CodeCave(ccLoginBackCanvasFix, dwLoginBackCanvasFix, LoginBackCanvasFixNOPs);	//world select buttons fix		//thank you teto for pointing out my error in finding the constructor
-
-		//yOffsetOfLoginBackBtnFix = 300 + myHeight; xOffsetOfLoginBackBtnFix = 0 + myWidth;	//para for back button
-		//Memory::CodeCave(ccLoginBackBtnFix, dwLoginBackBtnFix, LoginBackBtnFixNOPs); //back button on world select //unnecessary as buttons move with canvas
 
 		nHeightOfsettedLoginViewRecFix = 167 + myHeight; nWidthOfsettedLoginViewRecFix = 540 + myWidth;//para for ViewRec fix
 		nTopOfsettedLoginViewRecFix = 51 + myHeight; nLeftOfsettedLoginViewRecFix = 136 + myWidth;
@@ -588,36 +466,11 @@ void Client::UpdateResolution() {
 	Memory::CodeCave(ccMuruengraidEngBar2, dwMuruengraidEngBar2, MuruengraidEngBar2NOPs);	//muruengraid scaling	
 	yOffsetOfMuruengraidClearRoundUI = 260 + myHeight; xOffsetOfMuruengraidClearRoundUI = 400 + myWidth; //params
 	Memory::CodeCave(ccMuruengraidClearRoundUI, dwMuruengraidClearRoundUI, MuruengraidClearRoundUINOPs);	//muruengraid scaling
-	//yOffsetOfMuruengraidTimerCanvas = 28 + dojangYoffset; xOffsetOfMuruengraidTimerCanvas = 112 + myWidth; //params
-	//Memory::CodeCave(ccMuruengraidTimerCanvas, dwMuruengraidTimerCanvas, MuruengraidTimerCanvasNOPs);	//muruengraid scaling	
-	//yOffsetOfMuruengraidTimerMinutes = 0 + dojangYoffset; xOffsetOfMuruengraidTimerMinutes = 0 + myWidth; //params	//not needed, bar moves all, kept for referrence or if change are needed
-	//Memory::CodeCave(ccMuruengraidTimerMinutes, dwMuruengraidTimerMinutes, MuruengraidTimerMinutesNOPs);	//muruengraid scaling	
-	//yOffsetOfMuruengraidTimerSeconds = 0 + dojangYoffset; xOffsetOfMuruengraidTimerSeconds = 68 + myWidth; //params
-	//Memory::CodeCave(ccMuruengraidTimerSeconds, dwMuruengraidTimerSeconds, MuruengraidTimerSecondsNOPs);	//muruengraid scaling
 	yOffsetOfMuruengraidTimerBar = 16 + dojangYoffset; xOffsetOfMuruengraidTimerBar = 345 + myWidth; //params
 	Memory::CodeCave(ccMuruengraidTimerBar, dwMuruengraidTimerBar, MuruengraidTimerBarNOPs);	//muruengraid scaling
 	xOffsetOfMuruengraidMonster1_2 = 318 + myWidth; //params	//finally fixed this bugger
 	Memory::CodeCave(ccMuruengraidMonster1_2, dwMuruengraidMonster1_2, MuruengraidMonster1_2NOPs);	//muruengraid scaling
 
-	//testingOut("IWzProperty__GetItem _this: 0x%x, result: 0x%x, sPath: %s");//, _this, result, (char*)sPath);
-
-	//int myStatsWindowOffsetVal = 4, myStatsWindowOffset = 176, myStatsWindowOffset1 = 177;
-	//Memory::WriteInt(0x008C4AB3 + 1, myStatsWindowOffset); //stat window ty resinate
-	//Memory::WriteInt(0x008C510A + 1, myStatsWindowOffset1); //stat window ty resinate
-	
-	//const char* testString = "RoSWzFile"; Memory::WriteString(0x00B3F434, testString);//testing
-	//Memory::WriteInt(0x009F74EA + 3, 16); //testing
-	//Memory::WriteInt(0x008C4286 + 1, 400); //testing
-	//Memory::WriteInt(0x00780743 + 3, 400); //testing
-	//Memory::WriteByte(0x004289C0 + 1, 99); //testing
-	//Memory::FillBytes(0x00485C01, 0x90, 2);
-	//Memory::FillBytes(0x00485C21, 0x90, 2);
-
-	//Memory::CodeCave(testingCodeCave, dwTesting, TestingNOPs); //testing
-	//Memory::CodeCave(testingCodeCave2, dwTesting2, Testing2NOPs); //testing
-	//Memory::CodeCave(testingCodeCave3, dwTesting3, Testing3NOPs); //testing
-	//Memory::CodeCave(testingCodeCave4, dwTesting4, Testing4NOPs); //testing
-	//std::cout << "Client Value: " << MainMain::CustomLoginFrame << std::endl;
 }
 
 void Client::EnableNewIGCipher() {//??not called //no idea what cipher is

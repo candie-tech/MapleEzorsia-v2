@@ -62,7 +62,7 @@ void Client::UpdateGameStartup() {
 
 	Memory::WriteByte(0x0040013E, 0x2F);  //4g edit, not sure if it still works after execution
 
-	Memory::WriteByte(0x009516C2 + 1, 0x89); //bow & arrow no-whack mod
+	Memory::WriteByte(0x009516C2 + 1, 0x89); //star & arrow no-whack mod
 }
 
 void Client::UpdateResolution() {

@@ -48,9 +48,7 @@ void Client::UpdateGameStartup() {
 
 	//optional non-resolution related stuff
 	if (useTubi) { Memory::FillBytes(0x00485C32, 0x90, 2); }
-	Memory::FillBytes(0x0092EDC7, 0x90, 10); // no breath full disable (char atk) (animation and CC/equip/drop blocks)
-	Memory::FillBytes(0x0095923F, 0x90, 10); // no breath full disable (mob hit)
-	
+	Memory::WriteDouble(0x00AFE8A0, setDamageCap);	//ty rain
 	int setDamageCapInt = static_cast<int>(setDamageCap < 0 ? setDamageCap - 0.5 : setDamageCap + 0.5);
 	Memory::WriteInt(0x008C3304 + 1, setDamageCapInt); //ty rain
 
@@ -59,6 +57,9 @@ void Client::UpdateGameStartup() {
 	Memory::WriteInt(0x0094D91E + 1, speedMovementCap); //set speed cap //ty ronan
 
 	Memory::WriteByte(0x0040013E, 0x2F);  //4g edit, not sure if it still works after execution
+
+	Memory::FillBytes(0x0092EDC7, 0x90, 10); // no breath full disable (char atk) (animation and CC/equip/drop blocks)
+	Memory::FillBytes(0x0095923F, 0x90, 10); // no breath full disable (mob hit)
 }
 
 void Client::UpdateResolution() {

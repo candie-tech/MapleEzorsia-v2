@@ -60,6 +60,9 @@ void Client::UpdateGameStartup() {
 
 	Memory::FillBytes(0x0092EDC7, 0x90, 10); // no breath full disable (char atk) (animation and CC/equip/drop blocks)
 	Memory::FillBytes(0x0095923F, 0x90, 10); // no breath full disable (mob hit)
+
+	Memory::WriteByte(0x00826F92, 0x00); // instant maker crafting
+
 }
 
 void Client::UpdateResolution() {

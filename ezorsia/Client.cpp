@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "AddyLocations.h"
 #include "codecaves.h"
+#include "Cosmetics.h"
 
 int Client::m_nGameHeight = 720;
 int Client::m_nGameWidth = 1280;
@@ -84,6 +85,8 @@ void Client::UpdateGameStartup() {
 	//008D405E //008D40D4 //sub_8D3B2F
 	//008D4B93 //008D4BBC //CUIStatusBar::SetChatType
 	//00960581 //00960839 //00960C67 //00960DED //CUserLocal::DrawCombo
+
+	Cosmetics::ApplyEdits();
 }
 
 void Client::UpdateResolution() {
